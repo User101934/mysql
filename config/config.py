@@ -6,12 +6,12 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
     DEBUG = os.getenv("FLASK_DEBUG", "True").lower() == "true"
-
-    DB_USERNAME = os.environ.get("DB_USER", "root")
-    DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
-    DB_HOST     = os.environ.get("DB_HOST", "localhost")
+    DB_USERNAME = os.environ.get("DB_USERNAME")
+    DB_PASSWORD = os.environ.get("DB_PASSWORD")
+    DB_HOST     = os.environ.get("DB_HOST")
     DB_PORT     = os.environ.get("DB_PORT", "3306")
-    DB_NAME     = os.environ.get("DB_NAME", "nexlearn")
+    DB_NAME     = os.environ.get("DB_NAME")
+
 
     # Support for DATABASE_URL (common on Render) or individual variables
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
