@@ -22,7 +22,7 @@ def create_app():
     )
 
     db.init_app(app)
-    CORS(app, resources={r"/api/*": {"origins": Config.ALLOWED_ORIGINS}})
+    CORS(app)
     jwt = JWTManager(app)
 
     @jwt.unauthorized_loader
@@ -42,11 +42,7 @@ def create_app():
     def health():
         return {"status": "ok"}, 200
 
-    @app.route("/debug/routes")
-    def list_routes():
-        return {
-            "routes": [str(rule) for rule in app.url_map.iter_rules()]
-        }
+
 
     @app.errorhandler(404)
     def not_found(e):
