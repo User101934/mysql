@@ -1,0 +1,9 @@
+flask
+flask-cors
+flask-jwt-extended
+flask-sqlalchemy
+python-dotenv
+gunicorn
+pymysql
+psycopg2-binary
+cryptography
