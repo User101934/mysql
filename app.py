@@ -52,16 +52,23 @@ def create_app():
 
     return app
 
-app = create_app()
+def init_db(app):
+    with app.app_context():
+        try:
+            # Check connection
+            from sqlalchemy import text
+            db.session.execute(text('SELECT 1'))
+            
+            # Create tables and seed
+            db.create_all()
+            seed_courses(app)
+            print("✅ Database initialized successfully.")
+        except Exception as e:
+            app.logger.error(f"❌ Database initialization failed: {e}")
 
-@app.before_first_request
-def check_db_connection():
-    try:
-        from sqlalchemy import text
-        db.session.execute(text('SELECT 1'))
-    except Exception as e:
-        app.logger.error(f"Database connection failed: {e}")
-        # We don't exit here to allow the app to start and show errors in logs
+# Initialize app and database
+app = create_app()
+init_db(app)
 
 
 def seed_courses(app):
@@ -113,14 +120,6 @@ def seed_courses(app):
 if __name__ == "__main__":
     # ── Print DB connection so we can debug ──────────────
     print("🔌 Connecting to:", app.config["SQLALCHEMY_DATABASE_URI"])
-
-    with app.app_context():
-        try:
-            db.create_all()
-            print("✅ Database tables ready.")
-            seed_courses(app)
-        except Exception as e:
-            print(f"❌ Error initializing database: {e}")
 
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port, debug=False)
