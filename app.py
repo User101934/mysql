@@ -40,7 +40,13 @@ def create_app():
 
     @app.route("/api/health")
     def health():
-        return jsonify({"status": "ok", "service": "NexLearn API"}), 200
+        return {"status": "ok"}, 200
+
+    @app.route("/debug/routes")
+    def list_routes():
+        return {
+            "routes": [str(rule) for rule in app.url_map.iter_rules()]
+        }
 
     @app.errorhandler(404)
     def not_found(e):
