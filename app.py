@@ -52,25 +52,6 @@ def create_app():
 
     return app
 
-def init_db(app):
-    with app.app_context():
-        try:
-            # Check connection
-            from sqlalchemy import text
-            db.session.execute(text('SELECT 1'))
-            
-            # Create tables and seed
-            db.create_all()
-            seed_courses(app)
-            print("✅ Database initialized successfully.")
-        except Exception as e:
-            app.logger.error(f"❌ Database initialization failed: {e}")
-
-# Initialize app and database
-app = create_app()
-init_db(app)
-
-
 def seed_courses(app):
     from models.models import Course
     with app.app_context():
@@ -115,6 +96,27 @@ def seed_courses(app):
             db.session.add(Course(**c))
         db.session.commit()
         print(f"✅ Seeded {len(courses)} courses.")
+
+def init_db(app):
+    with app.app_context():
+        try:
+            # Check connection
+            from sqlalchemy import text
+            db.session.execute(text('SELECT 1'))
+            
+            # Create tables and seed
+            db.create_all()
+            seed_courses(app)
+            print("✅ Database initialized successfully.")
+        except Exception as e:
+            app.logger.error(f"❌ Database initialization failed: {e}")
+
+# Initialize app and database
+app = create_app()
+init_db(app)
+
+
+
 
 
 if __name__ == "__main__":
